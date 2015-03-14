@@ -2,8 +2,6 @@
 
 #import "NSDate+HYPString.h"
 
-#define ARC4RANDOM_MAX 0x100000000
-
 @interface Tests : XCTestCase
 
 @end
