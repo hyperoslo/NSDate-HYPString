@@ -8,39 +8,39 @@
 
 @implementation Tests
 
-- (void)testTimeStringFromDate
+- (void)testTimeString
 {
     NSDate *date = [self timeForHour:10 minute:10];
     XCTAssertEqualObjects([date hyp_timeString], @"10:10");
 }
 
-- (void)testDateStringFromDate
+- (void)testDateString
 {
     NSDate *date = [self dateForDay:1 month:1 year:2010];
     XCTAssertEqualObjects([date hyp_dateString], @"2010-01-01");
 }
 
-- (void)testDateStringFromDateWithFormat
+- (void)testDateStringWithFormat
 {
     NSDate *date = [self dateForDay:1 month:1 year:2010];
     XCTAssertEqualObjects([date hyp_dateStringWithFormat:@"dd.MM.yyyy"], @"01.01.2010");
 }
 
-- (void)testTimeRangeStringFromStartDateToEndDate
+- (void)testTimeRangeStringToEndDate
 {
     NSDate *startDate = [self timeForHour:10 minute:10];
     NSDate *endDate = [self timeForHour:12 minute:12];
     XCTAssertEqualObjects([startDate hyp_timeRangeStringToEndDate:endDate], @"10:10 - 12:12");
 }
 
-- (void)testDateRangeStringFromStartDateToEndDate
+- (void)testDateRangeStringToEndDate
 {
     NSDate *startDate = [self dateForDay:1 month:1 year:2010];
     NSDate *endDate = [self dateForDay:2 month:2 year:2012];
     XCTAssertEqualObjects([startDate hyp_dateRangeStringToEndDate:endDate], @"2010-01-01 - 2012-02-02");
 }
 
-- (void)testDateRangeStringFromStartDateToEndDateWithFormat
+- (void)testDateRangeStringToEndDateWithFormat
 {
     NSDate *startDate = [self dateForDay:1 month:1 year:2010];
     NSDate *endDate = [self dateForDay:2 month:2 year:2012];
