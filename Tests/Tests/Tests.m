@@ -3,10 +3,6 @@
 #import "NSDate+HYPString.h"
 
 #define ARC4RANDOM_MAX 0x100000000
-static NSString * const HYPDateDefaultFormat = @"yyyy-MM-dd";
-static NSString * const HYPTimeDefaultFormat = @"HH:mm";
-static NSString * const HYPTimeRangeFormat = @"%@ - %@";
-static const NSUInteger HYPTestLimit = 50;
 
 @interface Tests : XCTestCase
 
@@ -16,107 +12,66 @@ static const NSUInteger HYPTestLimit = 50;
 
 - (void)testTimeStringFromDate
 {
-    for (NSDate *date in [self randomDates]) {
-        NSString *timeString = [self dateStringFromDate:date
-                                             withFormat:HYPTimeDefaultFormat];
-        XCTAssertEqualObjects([date hyp_timeString], timeString);
-    }
+    NSDate *date = [self timeForHour:10 minute:10];
+    XCTAssertEqualObjects([date hyp_timeString], @"10:10");
 }
 
 - (void)testDateStringFromDate
 {
-    for (NSDate *date in [self randomDates]) {
-        NSString *dateString = [self dateStringFromDate:date
-                                             withFormat:HYPDateDefaultFormat];
-        XCTAssertEqualObjects([date hyp_dateString], dateString);
-    }
+    NSDate *date = [self dateForDay:1 month:1 year:2010];
+    XCTAssertEqualObjects([date hyp_dateString], @"2010-01-01");
 }
 
 - (void)testDateStringFromDateWithFormat
 {
-    for (NSDate *date in [self randomDates]) {
-        for (NSString *format in [Tests dateFormats]) {
-            NSString *formattedDateString = [self dateStringFromDate:date
-                                                          withFormat:format];
-            XCTAssertEqualObjects([date hyp_dateStringWithFormat:format], formattedDateString);
-        }
-    }
+    NSDate *date = [self dateForDay:1 month:1 year:2010];
+    XCTAssertEqualObjects([date hyp_dateStringWithFormat:@"dd.MM.yyyy"], @"01.01.2010");
 }
 
 - (void)testTimeRangeStringFromStartDateToEndDate
 {
-    for (NSInteger i = 0; i < HYPTestLimit; i++) {
-        NSDate *startDate = [self randomDate];
-        NSDate *endDate = [self randomDate];
-        NSString *timeRange = [startDate hyp_dateRangeStringToEndDate:endDate
-                                                           withFormat:HYPTimeDefaultFormat];
-        XCTAssertEqualObjects([startDate hyp_timeRangeStringToEndDate:endDate], timeRange);
-    }
+    NSDate *startDate = [self timeForHour:10 minute:10];
+    NSDate *endDate = [self timeForHour:12 minute:12];
+    XCTAssertEqualObjects([startDate hyp_timeRangeStringToEndDate:endDate], @"10:10 - 12:12");
 }
 
 - (void)testDateRangeStringFromStartDateToEndDate
 {
-    for (NSInteger i = 0; i < HYPTestLimit; i++) {
-        NSDate *startDate = [self randomDate];
-        NSDate *endDate = [self randomDate];
-        NSString *dateRange = [startDate hyp_dateRangeStringToEndDate:endDate
-                                                           withFormat:HYPDateDefaultFormat];
-        XCTAssertEqualObjects([startDate hyp_dateRangeStringToEndDate:endDate], dateRange);
-    }
+    NSDate *startDate = [self dateForDay:1 month:1 year:2010];
+    NSDate *endDate = [self dateForDay:2 month:2 year:2012];
+    XCTAssertEqualObjects([startDate hyp_dateRangeStringToEndDate:endDate], @"2010-01-01 - 2012-02-02");
 }
 
 - (void)testDateRangeStringFromStartDateToEndDateWithFormat
 {
-    for (NSInteger i = 0; i < HYPTestLimit; i++) {
-        for (NSString *format in [Tests dateFormats]) {
-            NSDate *startDate = [self randomDate];
-            NSDate *endDate = [self randomDate];
-            NSString *formattedDateRange = [startDate hyp_dateRangeStringToEndDate:endDate
-                                                                        withFormat:format];
-            XCTAssertEqualObjects([startDate hyp_dateRangeStringToEndDate:endDate withFormat:format], formattedDateRange);
-        }
-    }
+    NSDate *startDate = [self dateForDay:1 month:1 year:2010];
+    NSDate *endDate = [self dateForDay:2 month:2 year:2012];
+    XCTAssertEqualObjects([startDate hyp_dateRangeStringToEndDate:endDate withFormat:@"dd.MM.yyyy"], @"01.01.2010 - 02.02.2012");
 }
 
-#pragma mark - Test data generation
+#pragma mark - Helpers
 
-- (NSArray *)randomDates
+- (NSDate *)dateForDay:(NSInteger)day month:(NSInteger)month year:(NSInteger)year
 {
-    NSMutableArray *dates = [[NSMutableArray alloc] initWithCapacity:HYPTestLimit];
-    for (NSInteger i = 0; i < HYPTestLimit; i++) {
-        dates[i] = [self randomDate];
-    }
+    NSCalendar *calendar = [NSCalendar currentCalendar];
+    NSDateComponents *components = [calendar components:(NSCalendarUnitYear | NSCalendarUnitMonth | NSCalendarUnitDay)
+                                               fromDate:[NSDate date]];
+    components.day = day;
+    components.month = month;
+    components.year = year;
 
-    return [dates copy];
+    return [calendar dateFromComponents:components];
 }
 
-- (NSDate *)randomDate
+- (NSDate *)timeForHour:(NSInteger)hour minute:(NSInteger)minute
 {
-    NSTimeInterval maxTimeInterval = [NSDate timeIntervalSinceReferenceDate];
-    NSTimeInterval randomInterval = ((NSTimeInterval)arc4random() / ARC4RANDOM_MAX) * maxTimeInterval;
+    NSCalendar *calendar = [NSCalendar currentCalendar];
+    NSDateComponents *components = [calendar components:(NSCalendarUnitHour | NSCalendarUnitMinute)
+                                               fromDate:[NSDate date]];
+    components.hour = hour;
+    components.minute = minute;
 
-    return [NSDate dateWithTimeIntervalSinceReferenceDate:randomInterval];
-}
-
-- (NSString *)dateStringFromDate:(NSDate *)date withFormat:(NSString *)format;
-{
-    NSDateFormatter *dateFormatter = [NSDateFormatter new];
-    dateFormatter.dateFormat = format;
-
-    return [dateFormatter stringFromDate:date];
-}
-
-#pragma mark - Static test data
-
-+ (NSArray *)dateFormats
-{
-    return @[@"yyyy-MM-dd",
-             @"yyyy-MM-dd HH:mm",
-             @"dd-MM-yyyy",
-             @"dd-MM-yyyy HH:mm",
-             @"MMM dd, yyyy",
-             @"MMM dd, yyyy HH:mm",
-             @"invalidFormat"];
+    return [calendar dateFromComponents:components];
 }
 
 @end
