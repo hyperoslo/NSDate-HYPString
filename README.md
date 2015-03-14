@@ -27,7 +27,9 @@
 **NSDate-HYPString** is available through [CocoaPods](http://cocoapods.org). To install
 it, simply add the following line to your Podfile:
 
-`pod 'NSDate-HYPString'`
+```ruby
+pod 'NSDate-HYPString'
+```
 
 ## Author
 
