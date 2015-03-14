@@ -16,10 +16,10 @@ static NSString * const HYPTimeRangeFormat = @"%@ - %@";
     return [self hyp_dateStringWithFormat:HYPDateDefaultFormat];
 }
 
-- (NSString *)hyp_dateStringWithFormat:(NSString *)format;
+- (NSString *)hyp_dateStringWithFormat:(NSString *)format
 {
     NSDateFormatter *dateFormatter = [NSDateFormatter new];
-    [dateFormatter setDateFormat:format];
+    dateFormatter.dateFormat = format;
 
     return [dateFormatter stringFromDate:self];
 }
@@ -34,7 +34,7 @@ static NSString * const HYPTimeRangeFormat = @"%@ - %@";
     return [self hyp_dateRangeStringToEndDate:endDate withFormat:HYPDateDefaultFormat];
 }
 
-- (NSString *)hyp_dateRangeStringToEndDate:(NSDate *)endDate withFormat:(NSString *)format;
+- (NSString *)hyp_dateRangeStringToEndDate:(NSDate *)endDate withFormat:(NSString *)format
 {
     return [NSString stringWithFormat:HYPTimeRangeFormat,
             [self hyp_dateStringWithFormat:format],
