@@ -21,7 +21,11 @@ static NSString * const HYPTimeRangeFormat = @"%@ - %@";
     NSDateFormatter *dateFormatter = [NSDateFormatter new];
     dateFormatter.dateFormat = format;
 
-    return [dateFormatter stringFromDate:self];
+    NSTimeZone *timezone = [NSTimeZone localTimeZone];
+    NSInteger seconds = [timezone secondsFromGMTForDate:self];
+    NSDate *localDate = [NSDate dateWithTimeInterval:seconds sinceDate:self];
+
+    return [dateFormatter stringFromDate:localDate];
 }
 
 - (NSString *)hyp_timeRangeStringToEndDate:(NSDate *)endDate
