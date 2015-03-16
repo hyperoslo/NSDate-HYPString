@@ -1,7 +1,7 @@
 Pod::Spec.new do |s|
   s.name             = "NSDate-HYPString"
   s.summary          = "Categories to convert NSDates to NSStrings"
-  s.version          = "0.1.1"
+  s.version          = "0.2"
   s.homepage         = "https://github.com/hyperoslo/NSDate-HYPString"
   s.license          = 'MIT'
   s.author           = { "Hyper AS" => "teknologi@hyper.no" }
