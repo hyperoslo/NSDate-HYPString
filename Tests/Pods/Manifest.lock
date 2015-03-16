@@ -1,0 +1,10 @@
+PODS:
+  - NSDate-HYPConvenience (0.1.1)
+
+DEPENDENCIES:
+  - NSDate-HYPConvenience
+
+SPEC CHECKSUMS:
+  NSDate-HYPConvenience: 0613737572a6fc47d2516c97e9218d6626191e72
+
+COCOAPODS: 0.36.0
