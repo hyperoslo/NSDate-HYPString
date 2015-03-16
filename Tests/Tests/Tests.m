@@ -47,29 +47,4 @@
     XCTAssertEqualObjects([startDate hyp_dateRangeStringToEndDate:endDate withFormat:@"dd.MM.yyyy"], @"01.01.2010 - 02.02.2012");
 }
 
-#pragma mark - Helpers
-
-- (NSDate *)dateForDay:(NSInteger)day month:(NSInteger)month year:(NSInteger)year
-{
-    NSCalendar *calendar = [NSCalendar currentCalendar];
-    NSDateComponents *components = [calendar components:(NSCalendarUnitYear | NSCalendarUnitMonth | NSCalendarUnitDay)
-                                               fromDate:[NSDate date]];
-    components.day = day;
-    components.month = month;
-    components.year = year;
-
-    return [calendar dateFromComponents:components];
-}
-
-- (NSDate *)timeForHour:(NSInteger)hour minute:(NSInteger)minute
-{
-    NSCalendar *calendar = [NSCalendar currentCalendar];
-    NSDateComponents *components = [calendar components:(NSCalendarUnitHour | NSCalendarUnitMinute)
-                                               fromDate:[NSDate date]];
-    components.hour = hour;
-    components.minute = minute;
-
-    return [calendar dateFromComponents:components];
-}
-
 @end
